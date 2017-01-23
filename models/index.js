@@ -11,9 +11,6 @@ var pageTable = db.define('page', {
   urlTitle: {
     type: Sequelize.STRING,
     allowNull: false,
-    validate: {
-      isUrl: true
-    },
     route: function(){
       var url = this.getDataValue('urlTitle');
       return '/wiki/' + url;
@@ -29,10 +26,14 @@ var pageTable = db.define('page', {
   date: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW
-  },
-
-
-});
+  }
+}, {
+  hooks: {
+    beforeValidate : function(page, options){
+      page.urlTitle = generateUrlTitle(page.title)
+    }
+  }
+})
 
 var userTable = db.define('user',{
   name: {
@@ -48,6 +49,17 @@ var userTable = db.define('user',{
     }
   }
 });
+
+function generateUrlTitle (title) {
+  if (title) {
+    // Removes all non-alphanumeric characters from title
+    // And make whitespace underscore
+    return title.replace(/\s+/g, '_').replace(/\W/g, '');
+  } else {
+    // Generates random 5 letter string
+    return Math.random().toString(36).substring(2, 7);
+  }
+}
 
 module.exports = {
   Page: pageTable,

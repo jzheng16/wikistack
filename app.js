@@ -20,7 +20,7 @@ models.User.sync({force:true}).then(function(){
 .catch(console.error);
 
 
-const routes = require('./routes/');
+const wikiRouter = require('./routes/wiki');
 
 
 // EXPRESS STUFF!!!
@@ -38,7 +38,7 @@ app.use(bodyParser.json())
 //   res.write('you posted:\n')
 //   res.end(JSON.stringify(req.body, null, 2))
 // })
-app.use('/', routes);
+app.use('/wiki', wikiRouter);
 
 // TEMPLATES STUFF!!!
 
