@@ -2,13 +2,24 @@ const express = require( 'express' );
 const morgan = require('morgan');
 const nunjucks = require('nunjucks');
 const bodyParser = require('body-parser');
+const models = require('./models');
 
 
 const app = express(); // creates an instance of an express application
-const port = 3000
-const server = app.listen(port, function() {
-  console.log('listening on port ',port );
-});
+const port = 3000;
+
+
+
+models.User.sync({force:true}).then(function(){
+  return models.Page.sync()
+}).then(function (){
+  app.listen(3000, function(){
+    console.log('listening on port ', port );
+  });
+})
+.catch(console.error);
+
+
 const routes = require('./routes/');
 
 
