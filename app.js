@@ -10,8 +10,8 @@ const port = 3000;
 
 
 
-models.User.sync({force:true}).then(function(){
-  return models.Page.sync()
+models.User.sync({}).then(function(){
+  return models.Page.sync({})
 }).then(function (){
   app.listen(3000, function(){
     console.log('listening on port ', port );

@@ -11,10 +11,6 @@ var pageTable = db.define('page', {
   urlTitle: {
     type: Sequelize.STRING,
     allowNull: false,
-    route: function(){
-      var url = this.getDataValue('urlTitle');
-      return '/wiki/' + url;
-    }
   },
   content: {
     type: Sequelize.TEXT,
@@ -29,11 +25,17 @@ var pageTable = db.define('page', {
   }
 }, {
   hooks: {
-    beforeValidate : function(page, options){
+    beforeValidate: function(page, options){
       page.urlTitle = generateUrlTitle(page.title)
     }
+  },
+  getterMethods: {
+    route: function(){
+      var url = this.getDataValue('urlTitle');
+      return '/wiki/' + url;
+    }
   }
-})
+});
 
 var userTable = db.define('user',{
   name: {

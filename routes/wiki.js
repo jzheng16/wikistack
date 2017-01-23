@@ -6,7 +6,14 @@ var User = models.User;
 
 
 router.get('/', function(req, res, next) {
-  res.redirect('/');
+
+  var allPages = Page.findAll({});
+
+  allPages.then(function(pages){
+    res.render('index', {pages: pages});
+  });
+
+
 });
 
 router.post('/', function(req, res, next) {
@@ -16,8 +23,9 @@ router.post('/', function(req, res, next) {
   });
 
   page.save()
-  .then(function(data){
-    res.json(data);
+  .then(function(pageData){
+
+    res.redirect(pageData.route);
   })
   .catch(function(err){
     console.error(err);
@@ -37,7 +45,7 @@ router.get('/:url', function(req, res, next) {
     }
   })
   .then(function(response){
-    res.json(response);
+    res.render('wikipage', {title: response[0].title, content: response[0].content});
   })
   .catch(function(err){
     console.error(err);
